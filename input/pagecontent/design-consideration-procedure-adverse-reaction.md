@@ -11,40 +11,37 @@ In this IG, adverse reactions are recorded using the `AdverseEvent` resource. If
 classDiagram
   class ImAdverseReaction {
     <<AdverseEvent>>
-    code
-    category
-    resultingEffect
-    seriousness
-    occurence
-    suspectEntity.causality.entityRelatedness
-    suspectedEntity.instance
-    contributingFactor.item
-    note
-    extension.ImAdverseEventCriticality
+    code MS
+    category MS
+    resultingEffect MS
+    seriousness MS
+    occurence MS
+    suspectEntity.causality.entityRelatedness MS
+    suspectedEntity.instance MS
+    contributingFactor.item MS
+    note MS
+    extension.ImAdverseEventCriticality MS
   }
 
   class AllergicReaction{
-    verificationStatus
-    criticality
-    reaction.extension.allergyCertainty
-    reaction.substance
-    reaction.manifestation
-    reaction.severity 
-    reaction.onset
-    type
-    note
+    verificationStatus MS
+    criticality MS
+    reaction.extension.allergyCertainty MS
+    reaction.substance MS
+    reaction.manifestation MS
+    reaction.severity  MS
+    reaction.onset MS
+    type MS
+    note MS
   }
 
   class ProcedureEuImaging{
     <<Procedure>>
   }
 
-  ImAdverseReaction --> ProcedureEuImaging: suspectEntity.instanceReference
+  ImAdverseReaction --> ProcedureEuImaging: suspectEntity.instance
   ImAdverseReaction --> AllergicReaction: contributingFactor.item
 ```
-
-
-
 
 ### Rationale and other choices for modeling
 
