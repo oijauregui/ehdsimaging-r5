@@ -25,7 +25,7 @@ class Bundle <<type: collection>> {
 
 class DiagnosticReport <<main resource>> {
   +presentedForm : Attachment~PDF~
-  +imagingStudy : Reference~ImagingStudy~
+  +study : Reference~ImagingStudy~
   +basedOn : Reference~ServiceRequest~
   ...
 }
@@ -50,7 +50,7 @@ Bundle --> DiagnosticReport : entry
 Bundle --> ImagingStudy : entry (optional)
 Bundle --> ServiceRequest : entry (optional)
 DiagnosticReport --> PDF : presentedForm
-DiagnosticReport --> ImagingStudy : imagingStudy
+DiagnosticReport --> ImagingStudy : +study : Reference~ImagingStudy~
 DiagnosticReport --> ServiceRequest : basedOn
 
 @enduml
