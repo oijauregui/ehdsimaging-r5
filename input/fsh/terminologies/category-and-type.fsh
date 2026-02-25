@@ -1,17 +1,17 @@
 ValueSet: ImagingReportTypesEuVSEuImaging
-Title: "Radiology Report Types"
+Title: "ValueSet: Radiology Report Types"
 Description: "The set of radiology types as defined by LOINC."
 * insert SetFmmAndStatusRule( 1, draft )
 * ^experimental = false
 
-* include codes from system $loinc where STATUS = "ACTIVE" and SCALE_TYP = "Doc" and CLASS = "RAD"
-// * include codes from system $loinc where concept is-a #18726-0
+// Commented due to new error in validator * include codes from system $loinc where STATUS = "ACTIVE" and SCALE_TYP = "Doc" and CLASS = "RAD"
+* include codes from system $loinc where concept is-a #18726-0
 
 
 // TODO refer to manifest?
 ValueSet:   XdsClassCodeVs
 Id:	        im-xds-class-code-valueset
-Title:	    "XDS Class Codes"
+Title:	    "ValueSet: XDS Class Codes"
 Description:   """
 A list of XDS class codes that can be used for filtering manifests (zie [XDS_classCode_MetaData_Coding_System](https://wiki.ihe.net/index.php/XDS_classCode_Metadata_Coding_System)).
 **Note**: a IHE needs to make a formal FHIR CodeSystem for this.
