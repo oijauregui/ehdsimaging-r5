@@ -24,9 +24,17 @@ The `text` field of each section SHALL contain a textual representation of all l
 * extension contains 
     $event-basedOn-url          named basedOn 0..* and
     $information-recipient-url  named informationRecipient 0..* and
-    DiagnosticReportEuImagingReferenceExtensionEuImaging named diagnosticreport-reference 0..1
-//R4* extension contains $CrossVersion-Composition.version named version 0..1
+    $hl7euDiagnosticReferenceReference named diagnosticreport-reference 0..1
+
 * extension[diagnosticreport-reference].valueReference only Reference ( DiagnosticReportEuImaging )
+* extension[informationRecipient]
+  * ^short = "Information Recipient"
+  * ^definition = "The intended recipient of the report, if any. The information recipient is the target of a directive to receive the report, such as a report being sent to a practitioner or organization. The information recipient may also be a target for reporting relevant information about the report, such as reporting an issue with the report content.
+  This is included as an extension as this information is typically render in the header section of the report."
+
+//R4* extension contains $CrossVersion-Composition.version named version 0..1
+
+* subject 1..1
 
 * custodian only Reference( $EuOrganization )
   * ^short = "Organization that manages the Imaging Report"
@@ -37,21 +45,26 @@ The `text` field of each section SHALL contain a textual representation of all l
 * attester[legalAuthenticator]
   * mode 1..1
   * mode = http://hl7.org/fhir/composition-attestation-mode#legal
-  * party only Reference( $EuPractitionerRole )
+  * party only Reference( $EuPractitioner or $EuPractitionerRole )
   * time 1..1
 * attester[resultValidator]
   * mode 1..1
   * mode = http://hl7.org/fhir/composition-attestation-mode#professional
-  * party only Reference( $EuPractitionerRole )
+  * party only Reference( $EuPractitioner or $EuPractitionerRole )
+  * party.extension contains DeviceAttesterExt named deviceAttester 0..1
   * time 1..1
 
 * author 1..*
-  * insert SliceElement( #profile, [[$this.resolve()]] )
+  // * insert SliceElement( #profile, [[$this.resolve()]] )
+  * ^slicing.discriminator.type = #profile
+  * ^slicing.discriminator.path = "$this.resolve()"
+  * ^slicing.rules = #open
+  * ^slicing.ordered = false
 * author contains 
     author 0..* and 
     authoringDevice 0..* and
     organization 0..*
-* author[author] only Reference( $EuPractitionerRole )
+* author[author] only Reference( $EuPractitioner or $EuPractitionerRole )
 * author[authoringDevice] only Reference( $EuDevice )
 * author[organization] only Reference( $EuOrganization )
 
@@ -61,10 +74,14 @@ The `text` field of each section SHALL contain a textual representation of all l
   * ^short = "Type of Imaging Diagnostic Report"
   * ^definition = "Defines the document type, it is recommended to take this from the suggested LOINC set."
 
-* category 1..*
+* category 0..*
   * insert SliceElement( #value, $this )
-* category contains diagnostic-service 1..1 
+* category contains diagnostic-service 0..1 and imaging-report 1..1 and imaging 1..1
 * category[diagnostic-service] from $diagnostic-service-sections (required)
+* category[imaging] = http://hl7.eu/fhir/eu-health-data-api/CodeSystem/eehrxf-document-priority-category-cs#Medical-Imaging
+  * ^definition = "Defines the priority category of the report as defined in the API spec."
+* category[imaging-report] = $loinc#85430-7 //Diagnostic imaging report
+  * ^definition = "Defines the category of the report, Diagnostic imaging report."
 
 
 * status 
@@ -74,6 +91,7 @@ The `text` field of each section SHALL contain a textual representation of all l
   * insert SliceElement( #value, code )
 * section.emptyReason from SectionEmptyReasonEuImaging (preferred)  
 * section obeys eu-imaging-composition-1
+* section obeys eu-imaging-composition-2
 * section contains 
     imagingstudy 1..1  and
     order 1..1 and
@@ -128,13 +146,25 @@ The `text` field of each section SHALL contain a textual representation of all l
 // // ///////////////////////////////// PROCEDURE SECTION ///////////////////////////////////////
 * section[procedure]
   * ^short = "Procedure"
+  * ^definition = "This section holds information related to the (performed) procedure(s) the generated the imaging study."
   * code = $loinc#55111-9 // "Current imaging procedure descriptions Document"
-  * extension contains $note-url named note 0..*
+  * extension contains 
+    $note-url named note 0..* and
+    RadiationDoseExt named radiationDose 0..1
   * entry 
     * insert SliceElement( #profile, $this )
   * entry contains 
-      procedure 0..*
+      procedure 0..* and adverse-event 0..* and radiation-dose 0..*
   * entry[procedure] only Reference(ProcedureEuImaging)
+    * ^short = "The imaging Procedure(s)"
+    * ^definition = "A reference the the procedure(s) in which the imaging study was performed."
+  * entry[adverse-event] only Reference(AdverseEvent)
+    * ^short = "AdverseEvent(s)"
+    * ^definition = "Possible AdverseEvents that occurred during the procedure."
+    // Replacing the ObservationRadiationDose by an extension on thi ssection due to XtEHR logical model 0.3.0 requirement change on data type
+  // * entry[radiation-dose] only Reference(ObservationRadiationDoseEuImaging)
+  //   * ^short = "Radiation-dose information"
+  //   * ^definition = "Information on radiation the patient was exposed to during the procedure."
 
 
 // ////////////////// COMPARISON SECTION //////////////////////////
@@ -157,9 +187,12 @@ The `text` field of each section SHALL contain a textual representation of all l
     * insert SliceElement( #profile, [[resolve()]] )
   * entry contains 
       finding 0..* and
-      keyimage 0..*
-  * entry[finding] only Reference(ObservationFindingEuImaging)
-  * entry[keyimage] only Reference(DocumentReferenceKeyImageEuImaging or ImagingSelectionKeyImageEuImaging)
+      keyimage 0..* and
+      image 0..*
+  * entry[finding] only Reference(Observation)
+  * entry[keyimage] only Reference( DocumentReferenceKeyImageEuImaging or ImagingSelectionKeyImageEuImaging )
+  * entry[image] only Reference( DocumentReference  )
+
 
 // /////////////////// IMPRESSION SECTION //////////////////////////
 * section[impression]
@@ -201,18 +234,31 @@ The `text` field of each section SHALL contain a textual representation of all l
   * code = $loinc#LP173421-1 // "Report"
   * extension contains $note-url named note 0..*
 
+Extension: RadiationDoseExt
+Title: "Extension: Radiation Dose"
+Id: RadiationDose
+Description: "Radiation dose information in the imaging report"
+* ^context[+].type = #element
+* ^context[=].expression = "Composition.section"
+* ^context[+].type = #element
+* ^context[=].expression = "DiagnosticReport"
+* value[x] only string
+* valueString ^short = "Radiation dose summary text."
+* valueString ^comment = "Information on total exposure to ionising radiation. This information is required by regulations in several EU countries."
+
+Extension: DeviceAttesterExt
+Title: "Extension: Device Attester"
+Description: 	"Attester of type Device who validated the document"
+* ^context[+].type = #element
+* ^context[=].expression = "Composition.attester.party"
+* value[x] only Reference(Device)
+
 Invariant: eu-imaging-composition-1
 Description: "When a section is empty, the emptyReason extension SHALL be present."
 Severity: #error 
-Expression: "entry.empty().not() or emptyReason.exists() or extension('http://hl7.org/fhir/StructureDefinition/note').value.text.exists()"
+Expression: "entry.empty().not() or emptyReason.exists() or section.exists() or extension('http://hl7.org/fhir/StructureDefinition/note').value.text.exists()"
 
-Extension: DiagnosticReportEuImagingReferenceExtensionEuImaging
-Title:  "Extension: Document DiagnosticReport Reference"
-Description: """
-    This extension provides a reference to the DiagnosticReport instance that is associated with this Composition.
-    """
-Context: Composition
-// publisher, contact, and other metadata here using caret (^) syntax (omitted)
-* insert ExtensionContext(Composition)
-* insert SetFmmAndStatusRule ( 2, draft )
-* value[x] only Reference (DiagnosticReportEuImaging)
+Invariant: eu-imaging-composition-2
+Description: "A section must contain at least one of text, entries, or sub-sections."
+Severity: #error 
+Expression: "text.exists() or entry.exists() or section.exists()"
