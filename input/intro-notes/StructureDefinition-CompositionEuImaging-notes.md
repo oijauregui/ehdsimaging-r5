@@ -36,6 +36,7 @@ The following table lists the elements that should be included in the narrative 
 | ServiceRequestOrderEuImaging | requester |  | [EHDSImagingReport](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSImagingReport.html).body.orderInformation.orderPlacer[x] |  |
 | ServiceRequestOrderEuImaging | reason.concept |  | [EHDSImagingReport](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSImagingReport.html).body.orderInformation.orderReason[x] |  |
 | ServiceRequestOrderEuImaging | reason.concept |  | [EHDSImagingReport](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSImagingReport.html).body.orderInformation.clinicalQuestion | Order reason and clinical question map to the same element by design choice |
+| ServiceRequestOrderEuImaging | code |  | . |  |
 
 ### History
 
@@ -67,6 +68,7 @@ The following table lists the elements that should be included in the narrative 
 | EuDevice | type |  | [EHDSDevice](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSDevice.html).type |  |
 | DiagnosticReportEuImaging | extension[radiationDose] |  | [EHDSImagingReport](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSImagingReport.html).body.exposureInformation | Comments in this issue https://github.com/Xt-EHR/xt-ehr-common/issues/365 |
 | CompositionEuImaging | section[procedure].entry[procedure] | EuProcedure | [EHDSImagingReport](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSImagingReport.html).body.examinationReport.imagingProcedures |  |
+| CompositionEuImaging | section[procedure].entry[adverse-event] |  | [EHDSImagingReport](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSImagingReport.html).body.examinationReport.adverseReaction |  |
 | EuMedicationAdministration | reason |  | [EHDSMedicationAdministration](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSMedicationAdministration.html).reason[x] |  |
 | EuMedicationAdministration | note |  | [EHDSMedicationAdministration](https://www.xt-ehr.eu/fhir/models/0.3.0/StructureDefinition-EHDSMedicationAdministration.html).note |  |
 
