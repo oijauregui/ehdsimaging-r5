@@ -11,7 +11,10 @@
         class StructuredKeyImageRest <<DocumentReference>> [[./DocumentReference-StructuredKeyImageRest.html]]
         class StructuredKeyImageStress <<DocumentReference>> [[./DocumentReference-StructuredKeyImageStress.html]]
     }
-    
+
+
+
+ 
     WmsiRest01 --> Patient: subject
     WmsiRest01 --> WMSIImage: derivedFrom
     WmsiStress01 --> Patient: subject
