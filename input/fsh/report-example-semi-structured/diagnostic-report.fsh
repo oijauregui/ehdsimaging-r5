@@ -60,7 +60,7 @@ Rechter Fuß:
   * url = "http://hl7.eu/fhir/imaging-r5/Binary/BinarySemistructuredReport"
 
  // R5 validation requires a .result element to be present if .composition is present. This is a known issue: https://github.com/HL7/fhir-ig-publisher/issues/1267
-* result = Reference(ObservationAnchor)
+// * result = Reference(ObservationAnchor)
 
 
 // Instance: BinarySemiStructuredReport

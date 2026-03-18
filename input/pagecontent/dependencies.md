@@ -1,13 +1,3 @@
 {% include fsh-link-references.md %}
 {% include variable-definitions.md %}
-
-This page lists external dependencies and global profiles used by this guide.
-
-### Dependencies
-
-{% include dependency-table.xhtml %}
-
-
-### Global Profiles
-
-{% include globals-table.xhtml %}
+TODO<!--  { include dependency-table.xhtml } -->

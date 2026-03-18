@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ballotUrl="http://hl7.eu/fhir/imaging-r5/1.0.0-ballot" ciUrl="https://build.fhir.org/ig/hl7-eu/imaging-r5" defaultVersion="1.0.0-ballot" defaultWorkgroup="eu" gitUrl="https://github.com/HL7-eu/imaging-r5" url="http://hl7.eu/fhir/imaging-r5">
+<specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ballotUrl="http://hl7.eu/fhir/imaging-r5/0.1.0-ballot" ciUrl="https://build.fhir.org/ig/hl7-eu/imaging-r5" defaultVersion="0.1.0-ballot" defaultWorkgroup="eu" gitUrl="https://github.com/HL7-eu/imaging-r5" url="http://hl7.eu/fhir/imaging-r5">
 <version code="current" url="https://build.fhir.org/ig/hl7-eu/imaging-r5"/>
 <version code="1.0.0-ballot" url="http://hl7.eu/fhir/imaging-r5/1.0.0-ballot"/>
 <version code="0.1.0-snapshot1" deprecated="true" url="http://hl7.eu/fhir/imaging-r5/0.1.0-snapshot1"/>
@@ -16,9 +16,9 @@
 <artifact deprecated="true" id="StructureDefinition/EHDSAppointment" key="StructureDefinition-EHDSAppointment" name="Appointment model"/>
 <artifact deprecated="true" id="StructureDefinition/EHDSAttachment" key="StructureDefinition-EHDSAttachment" name="Attachment model"/>
 <artifact deprecated="true" id="StructureDefinition/EHDSAttachments" key="StructureDefinition-EHDSAttachments" name="Attachments"/>
-<artifact id="Binary/BinarySemistructuredReport" key="Binary-BinarySemistructuredReport" name="Binary Semistructured Report"/>
-<artifact id="Binary/BinaryStructuredReport" key="Binary-BinaryStructuredReport" name="Binary Structured Report"/>
-<artifact id="Binary/BinaryUnstructuredReport" key="Binary-BinaryUnstructuredReport" name="Binary Unstructured Report"/>
+<artifact id="Binary/BinarySemistructuredReport" key="Binary-BinarySemistructuredReport" name="BinarySemistructuredReport"/>
+<artifact id="Binary/BinaryStructuredReport" key="Binary-BinaryStructuredReport" name="BinaryStructuredReport"/>
+<artifact id="Binary/BinaryUnstructuredReport" key="Binary-BinaryUnstructuredReport" name="BinaryUnstructuredReport"/>
 <artifact id="StructureDefinition/BundleReportEuImaging" key="StructureDefinition-BundleReportEuImaging" name="Bundle: Imaging Report"/>
 <artifact id="StructureDefinition/BundleReportMinimalMetadataEuImaging" key="StructureDefinition-BundleReportMinimalMetadataEuImaging" name="Bundle: Imaging Report Minimal Metadata"/>
 <artifact id="Bundle/bundle-report-minimal-metadata-unstructured" key="Bundle-bundle-report-minimal-metadata-unstructured" name="Bundle: Imaging Report minimal metadata (unstructured example)"/>
@@ -213,7 +213,6 @@
 <artifact deprecated="true" id="StructureDefinition/EHDSMedicationPrescriptionHeader" key="StructureDefinition-EHDSMedicationPrescriptionHeader" name="Medication prescription header model"/>
 <artifact deprecated="true" id="StructureDefinition/EHDSMedicationPrescription" key="StructureDefinition-EHDSMedicationPrescription" name="Medication prescription model"/>
 <artifact deprecated="true" id="StructureDefinition/EHDSMedication" key="StructureDefinition-EHDSMedication" name="Medicinal product model"/>
-<artifact id="Observation/ObservationAnchor" key="Observation-ObservationAnchor" name="Observation Anchor"/>
 <artifact deprecated="true" id="StructureDefinition/EHDSObservation" key="StructureDefinition-EHDSObservation" name="Observation model"/>
 <artifact id="StructureDefinition/ObservationGestationalAgeEuImaging" key="StructureDefinition-ObservationGestationalAgeEuImaging" name="Observation: Gestational Age"/>
 <artifact id="StructureDefinition/ObservationFindingEuImaging" key="StructureDefinition-ObservationFindingEuImaging" name="Observation: Imaging Finding"/>

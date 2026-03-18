@@ -24,21 +24,21 @@ Usage: #example
 * entry[ImagingStudy][+]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/ImagingStudy/ImagingStudySemiStructuredReport2"
   * resource = ImagingStudySemiStructuredReport2
-* entry[practitioner][+]
+* entry[practitioner]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/PractitionerRole/PractitionerRoleSemiStructuredReportAuthor"
   * resource = PractitionerRoleSemiStructuredReportAuthor
-* entry[practitioner][+]       
-  * fullUrl = "http://hl7.eu/fhir/imaging-r5/Practitioner/PractitionerSemiStructuredReportAuthor"
-  * resource = PractitionerSemiStructuredReportAuthor
+// * entry[practitioner]
+  // * fullUrl = "http://hl7.eu/fhir/imaging-r5/Practitioner/PractitionerSemiStructuredReportAuthor"
+  // * resource = PractitionerSemiStructuredReportAuthor
 * entry[organization]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/Organization/OrganizationSemiStructuredReport"
   * resource = OrganizationSemiStructuredReport
 * entry[binary]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/Binary/BinarySemistructuredReport"
   * resource = BinarySemistructuredReport
-* entry[findings]
-  * fullUrl = "http://hl7.eu/fhir/imaging-r5/Observation/ObservationAnchor"
-  * resource = ObservationAnchor
+// * entry[findings]
+//   * fullUrl = "http://hl7.eu/fhir/imaging-r5/Observation/ObservationAnchor"
+//   * resource = ObservationAnchor
 // * entry[order]
 //   * fullUrl = "http://hl7.eu/fhir/imaging-r5/ServiceRequest/ServiceRequestSemiStructured"
 //   * resource = ServiceRequestSemiStructured
