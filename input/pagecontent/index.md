@@ -1,5 +1,5 @@
-{% include fsh-link-references.md %}
-{% include variable-definitions.md %}
+{% raw %}{% include fsh-link-references.md %}{% endraw %}
+{% raw %}{% include variable-definitions.md %}{% endraw %}
 
   <!-- Horizontal banner -->
 <div style="border: 2px solid #003366; border-radius: 8px; padding: 1em; margin: 1.5em 0; background-color: #f9f9ff; display: flex; flex-direction: column; align-items: flex-start;">
@@ -43,13 +43,13 @@
 
 ### Scope
 
-This implementation guide specifies imaging study report data in the **European** context, as defined in  and refined by , as a FHIR model. It defines:
+This implementation guide specifies imaging study report data in the **European** context, as defined in {{ehnImaging}} and refined by {{XtEhrImaging}}, as a FHIR model. It defines:
 * The structure and contents of a FHIR imaging study reports.
 * Mapping between this IG and the Xt-EHR logical models for imaging reports, as functional requirements.
 * Example implementations of the defined models for Imaging Study Reports.
 * Relation of this specification with the existing ecosystem, including IHE MADO, IHE RAD, and EHDS API specifications.
 
-This specification has been designed to be compatible with .
+This specification has been designed to be compatible with {{EuridiceHealthDataAPI}}.
 
 ### Purpose
 
@@ -59,4 +59,4 @@ The development of this implementation guide is promoted by HL7 Europe, but real
 
 ### How to read this guide
 
-{% include how-to-read.md %}
+{% raw %}{% include how-to-read.md %}{% endraw %}
