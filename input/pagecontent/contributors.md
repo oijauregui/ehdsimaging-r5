@@ -8,11 +8,12 @@ The following picture provide an overview of the origin of the participants.
 
 <div>
     <img src="eu-coverage.png"  alt="Coverage" width="40%">
-    <p>Figure 1 - Experts distribution</p>
+    <p>Figure 1: Experts distribution</p>
     <p></p>
 </div>
 
-|Role                | Name                | Affiliation    |
-|--------------------|---------------------|----------------|
-| Project facilitator|  Bas van den Heuvel | Philips/HL7 EU |
-| Contributor        |  Ignacio Jauregui   | Philips        |
+|Role                       | Name                |
+|---------------------------|---------------------|
+| Project facilitator HL7eu |  Bas van den Heuvel | // Philips
+| Project facilitator IHEeu |  Mark Kämmerer      | // Visus
+| Contributor               |  Ignacio Jauregui   | // Philips
