@@ -1,5 +1,5 @@
-{% raw %}{% include fsh-link-references.md %}{% endraw %}
-{% raw %}{% include variable-definitions.md %}{% endraw %}
+{% include fsh-link-references.md %}
+{% include variable-definitions.md %}
 
   <!-- Horizontal banner -->
 <div style="border: 2px solid #003366; border-radius: 8px; padding: 1em; margin: 1.5em 0; background-color: #f9f9ff; display: flex; flex-direction: column; align-items: flex-start;">
@@ -43,7 +43,7 @@
 
 ### Scope
 
-This implementation guide specifies imaging study report data in the **European** context, as defined in {{ehnImaging}} and refined by {{XtEhrImaging}}, as a FHIR model. It defines:
+This implementation guide specifies imaging study report data in the **European** context, as defined in  and refined by , as a FHIR model. It defines:
 * The structure and contents of a FHIR imaging study reports.
 * Mapping between this IG and the Xt-EHR logical models for imaging reports, as functional requirements.
 * Example implementations of the defined models for Imaging Study Reports.
@@ -57,6 +57,8 @@ The goal of this Implementation Guide is to define an European standard for the 
 
 The development of this implementation guide is promoted by HL7 Europe, but realized in collaboration with several other European and national organizations and projects. The aspiration of this guide is to be used as basis for European National Guides, the European EHRxF ,and - consequently - by MyHealth@EU for the EU cross-border services.
 
-### How to read this guide
+{% include how-to-read.md %}
 
-{% raw %}{% include how-to-read.md %}{% endraw %}
+### Cross Version Analysis
+
+{% include cross-version-analysis-en.xhtml %}
