@@ -92,8 +92,8 @@ The `text` field of each section SHALL contain a textual representation of all l
 * section.emptyReason from SectionEmptyReasonEuImaging (preferred)  
 * section obeys eu-imaging-composition-1
 * section obeys eu-imaging-composition-2
-//R4* section.text.extension contains TextLink named text-link 0..1
-* section.text.extension contains $textLink named text-link 0..1
+// //R4* section.text.extension contains TextLink named text-link 0..1
+// * section.text.extension contains $textLink named text-link 0..1
 * section contains 
     imagingstudy 1..1  and
     order 1..1 and
@@ -253,3 +253,5 @@ Invariant: eu-imaging-composition-2
 Description: "A section must contain at least one of text, entries, or sub-sections."
 Severity: #error 
 Expression: "text.exists() or entry.exists() or section.exists()"
+
+// 
