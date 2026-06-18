@@ -34,6 +34,8 @@ as it was entered by the reporting clinician or an automated system."
   $rendering-markdown-url named renderingMarkdown 0..1
 //R4  and $CrossVersion-Observation.value named valueAttachment 0..1
 //R4* value[x].extension[valueAttachment] ^short = "Narrative report as an Attachment, conveyed via the R5 cross-version extension"
+//R4* value[x].extension[valueAttachment].value[x] 1..1
+//R4* value[x].extension[valueAttachment].value[x] only Attachment
 //R4* value[x].extension[renderingXhtml] ^short = "XHTML rendering of the narrative value"
 //R4* value[x].extension[renderingMarkdown] ^short = "Markdown rendering of the narrative value"
 
@@ -41,29 +43,3 @@ Invariant: im-narrative-value-1
 Description: "Either the narrative value (valueString) or its Attachment cross-version extension (value.extension) SHALL be present."
 Severity: #error
 Expression: "value.exists() or value.extension('http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value').exists()"
-
-// ---------------------------------------------------------------------------
-// Examples to probe validator behaviour for each pattern
-// ---------------------------------------------------------------------------
-
-Instance: ObservationNarrativeReportStringExample
-InstanceOf: ObservationNarrativeReport
-Usage: #example
-Title: "Observation Narrative Report - string value (Pattern A)"
-Description: "Narrative carried directly in value as a string."
-* status = #final
-* code = $loinc#18782-3
-* subject = Reference(PatientStructuredReport)
-* valueString = "CHEST X-RAY: The lungs are clear. Heart size is normal. No acute cardiopulmonary abnormality."
-
-//R4Instance: ObservationNarrativeReportAttachmentExample
-//R4InstanceOf: ObservationNarrativeReport
-//R4Usage: #example
-//R4Title: "Observation Narrative Report - Attachment via cross-version extension (Pattern B)"
-//R4Description: "Narrative carried as an Attachment using the R5 cross-version extension on value."
-//R4* status = #final
-//R4* code = $loinc#18782-3
-//R4* subject = Reference(PatientStructuredReport)
-//R4* valueString = "See attached radiology report PDF"
-//R4* valueString.extension[valueAttachment].valueAttachment.contentType = #application/pdf
-//R4* valueString.extension[valueAttachment].valueAttachment.title = "Radiology report PDF"
