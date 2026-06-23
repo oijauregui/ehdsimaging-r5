@@ -58,7 +58,3 @@ The goal of this Implementation Guide is to define an European standard for the 
 The development of this implementation guide is promoted by HL7 Europe, but realized in collaboration with several other European and national organizations and projects. The aspiration of this guide is to be used as basis for European National Guides, the European EHRxF ,and - consequently - by MyHealth@EU for the EU cross-border services.
 
 {% include how-to-read.md %}
-
-### Cross Version Analysis
-
-{% include cross-version-analysis-en.xhtml %}
