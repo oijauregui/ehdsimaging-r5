@@ -86,6 +86,25 @@ The `text` field of each section SHALL contain a textual representation of all l
 
 * status 
 
+// Relationship to a prior report: replacement or retraction (both use replaces).
+// Mirrors the FHIR Clinical Document Composition profile slicing.
+* relatesTo ^slicing.discriminator.type = #value
+//R4* relatesTo ^slicing.discriminator.path = "code"
+* relatesTo ^slicing.discriminator.path = "type"
+* relatesTo ^slicing.rules = #open
+* relatesTo contains replaced_document 0..1
+* relatesTo[replaced_document] ^short = "Prior report this one replaces or retracts"
+//R4* relatesTo[replaced_document].code = #replaces
+//R4* relatesTo[replaced_document].target[x] only Identifier
+//R4* relatesTo[replaced_document].targetIdentifier 1..1
+* relatesTo[replaced_document].type = #replaces
+* relatesTo[replaced_document].resourceReference 1..1
+* relatesTo[replaced_document].resourceReference.identifier 1..1
+* relatesTo[replaced_document].resourceReference.reference 0..0
+
+
+* obeys eu-imaging-comp-status-succession
+
 * section.code 1..1 
 * section 
   * insert SliceElement( #value, code )
@@ -110,7 +129,6 @@ The `text` field of each section SHALL contain a textual representation of all l
   * ^definition = "This section holds information related to the imaging studies covered by this report."
   // * title = "Imaging Studies"
   * code = $loinc#18726-0
-  * extension contains $note-url named note 0..*
   * entry 
     * insert SliceElement( #profile, $this )
   * entry contains imagingstudy 1..*
@@ -124,8 +142,6 @@ The `text` field of each section SHALL contain a textual representation of all l
   * ^short = "Order"
   * ^definition = "This section holds information related to the order for the imaging study."
   * code = $loinc#55115-0 // "Requested imaging studies information Document"
-  * extension contains $note-url named note 0..*
-
   * entry
     * insert SliceElement( #profile, $this )
   * entry contains 
@@ -135,7 +151,6 @@ The `text` field of each section SHALL contain a textual representation of all l
     * ^short = "Order reference"
     * ^definition = "This entry holds a reference to the order for the Imaging Study and report."
   * entry[order] only Reference(ServiceRequestOrderEuImaging)  
-  
 
 // // ///////////////////////////////// HISTORY SECTION ///////////////////////////////////////
 * section[history]
@@ -145,10 +160,9 @@ The `text` field of each section SHALL contain a textual representation of all l
   with information specific for imaging (i.e. Observation, Condition, Device, Medication Administration).
   """
   * code = $loinc#11329-0 // "History general Narrative - Reported"
-  * extension contains $note-url named note 0..*
   * entry 
     * insert SliceElement( #profile, [[$this.resolve()]] )
-  * entry contains vitals 0..* and problemlist 0..* and implants 0..* and medication 0..* 
+  * entry contains vitals 0..* and problemlist 0..* and implants 0..* and medication 0..*
   * entry[vitals] only Reference(Observation)
   * entry[problemlist] only Reference(Condition)
   * entry[implants] only Reference(Device)
@@ -159,9 +173,6 @@ The `text` field of each section SHALL contain a textual representation of all l
   * ^short = "Procedure"
   * ^definition = "This section holds information related to the (performed) procedure(s) the generated the imaging study."
   * code = $loinc#55111-9 // "Current imaging procedure descriptions Document"
-  * extension contains 
-    $note-url named note 0..* and
-    RadiationDoseExt named radiationDose 0..1
   * entry 
     * insert SliceElement( #profile, $this )
   * entry contains 
@@ -172,17 +183,14 @@ The `text` field of each section SHALL contain a textual representation of all l
   * entry[adverse-event] only Reference(AdverseEvent)
     * ^short = "AdverseEvent(s)"
     * ^definition = "Possible AdverseEvents that occurred during the procedure."
-    // Replacing the ObservationRadiationDose by an extension on thi ssection due to XtEHR logical model 0.3.0 requirement change on data type
-  // * entry[radiation-dose] only Reference(ObservationRadiationDoseEuImaging)
-  //   * ^short = "Radiation-dose information"
-  //   * ^definition = "Information on radiation the patient was exposed to during the procedure."
-
+  * entry[radiation-dose] only Reference(ObservationRadiationDoseEuImaging)
+    * ^short = "Radiation-dose information"
+    * ^definition = "Information on radiation the patient was exposed to during the procedure."
 
 // ////////////////// COMPARISON SECTION //////////////////////////
 * section[comparison]
-  * ^short = "History"
+  * ^short = "Comparison"
   * code = $loinc#18834-2 // "Radiology Comparison study (narrative)"
-  * extension contains $note-url named note 0..*
   * entry
     * insert SliceElement( #profile, [[resolve()]] )
   * entry contains 
@@ -193,7 +201,6 @@ The `text` field of each section SHALL contain a textual representation of all l
 * section[findings]
   * ^short = "Findings"
   * code = $loinc#59776-5 // "Findings"
-  * extension contains $note-url named note 0..*
   * entry
     * insert SliceElement( #profile, [[resolve()]] )
   * entry contains 
@@ -209,7 +216,6 @@ The `text` field of each section SHALL contain a textual representation of all l
 * section[impression]
   * ^short = "Impressions"
   * code = $loinc#19005-8 // "Radiology Imaging study [Impression] (narrative)"
-  * extension contains $note-url named note 0..*
   * entry
     * insert SliceElement( #profile, $this )
   * entry contains 
@@ -224,7 +230,7 @@ The `text` field of each section SHALL contain a textual representation of all l
 * section[recommendation]
   * ^short = "Recommendations"
   * code = $loinc#18783-1 // "Radiology Study recommendation (narrative)"
-  * extension contains $note-url named note 0..*
+  
   * entry
     * insert SliceElement( #profile, $this )
   * entry contains suggestion 0..*
@@ -236,26 +242,17 @@ The `text` field of each section SHALL contain a textual representation of all l
   * ^short = "Communications"
 // a proper code is needed
   * code = $loinc#73568-8 // "Communication"
-  * extension contains $note-url named note 0..*
+  
 
-// /////////////////// COMMUNICATION SECTION //////////////////////////
+// /////////////////// FULL-REPORT SECTION //////////////////////////
 * section[report]
   * ^short = "Report - all content in one section"
 // a proper code is needed
   * code = $loinc#LP173421-1 // "Report"
-  * extension contains $note-url named note 0..*
-
-Extension: RadiationDoseExt
-Title: "Extension: Radiation Dose"
-Id: RadiationDose
-Description: "Radiation dose information in the imaging report"
-* ^context[+].type = #element
-* ^context[=].expression = "Composition.section"
-* ^context[+].type = #element
-* ^context[=].expression = "DiagnosticReport"
-* value[x] only string
-* valueString ^short = "Radiation dose summary text."
-* valueString ^comment = "Information on total exposure to ionising radiation. This information is required by regulations in several EU countries."
+  * entry
+    * insert SliceElement( #profile, $this )
+  * entry contains narrative-report 1..*
+  * entry[narrative-report] only Reference(ObservationNarrativeReport)
 
 Extension: DeviceAttesterExt
 Title: "Extension: Device Attester"
@@ -273,3 +270,11 @@ Invariant: eu-imaging-composition-2
 Description: "A section must contain at least one of text, entries, or sub-sections."
 Severity: #error 
 Expression: "text.exists() or entry.exists() or section.exists()"
+
+// ////////////////////////// Status <-> relatesTo correspondence //////////////////////////
+
+Invariant: eu-imaging-comp-status-succession
+Description: "A Composition that replaces or retracts a prior report SHALL have status final or entered-in-error."
+* severity = #error
+//R4* expression = "relatesTo.where(code = 'replaces').exists() implies status in ('final' | 'entered-in-error')"
+* expression = "relatesTo.where(type = 'replaces').exists() implies status in ('final' | 'entered-in-error')"

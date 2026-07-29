@@ -3,7 +3,7 @@ Parent: DiagnosticReport
 Title: "DiagnosticReport: Imaging Report"
 Description: """
 DiagnosticReport profile for Imaging Reports. This document represents the report of an imaging study. It is the anchor resource that refers to all structured data as well as the `Composition` resource that contains the narrative text of the report.   
-The structure of the modelled has been aligned with the DiagnosticResource as defined by [IHE-RAD-HL7IDR](https://build.fhir.org/ig/IHE/RAD.HL7IDR/branches/master/StructureDefinition-imaging-diagnosticreport.html). As this specification has not been published yet, the relevant extensions have been included in this specification.
+The structure of the modelled has been aligned with the DiagnosticResource as defined by [IHE-RAD-IDR](https://build.fhir.org/ig/IHE/RAD.IDR/StructureDefinition-imaging-diagnosticreport.html). As this specification has not been published yet, the relevant extensions have been included in this specification.
 """
 * insert SetFmmAndStatusRule( 1, draft )
 // * insert MandateLanguageAndSecurity
@@ -27,6 +27,11 @@ The structure of the modelled has been aligned with the DiagnosticResource as de
  // R5 validation requires a .result element to be present if .composition is present. This is a known issue: https://github.com/HL7/fhir-ig-publisher/issues/1267
 * result 1..*
   * ^definition = "R5 requires a .result element to be present if .composition is present. This mandatory cardinality fills that gap for the model in which no Observations are part of the report."
+
+// Correspondence between DiagnosticReport.status and the referenced Composition succession data
+* obeys eu-imaging-dr-status-replacement
+* obeys eu-imaging-dr-status-retraction
+* obeys eu-imaging-dr-status-no-addendum
 
 Profile: DiagnosticReportEuImagingMinimalMetadata
 Parent: DiagnosticReport
@@ -80,6 +85,8 @@ This profile shares all common imaging report modeling with DiagnosticReportEuIm
 * composition 0..0
 * composition ^short = "Composition is not allowed in this minimal metadata profile. If composition is present, use the DiagnosticReportEuImaging profile instead."
 
+///////////////////////
+
 RuleSet: DiagnosticReportEuImagingCommonRules
 * extension contains $artifact-version-url named artifactVersion 0..1
 * extension contains AnatomicalRegionExtension named anatomical-region 0..*
@@ -100,7 +107,6 @@ The regions SHALL overlap with the bodysite references from `ImagingStudy.serie.
 
 * status
   * ^short = "Status of the Report"
-  * ^comment = "DiagnosticReport.status and Composition.status shall be aligned"
 
 /////////////////////
 
@@ -121,17 +127,11 @@ The regions SHALL overlap with the bodysite references from `ImagingStudy.serie.
 
 * subject only Reference($EuPatient)
 
+* basedOn only Reference(ServiceRequest or CarePlan)
+
 * issued 
   * ^short = "Date and time of report issuance"
   * ^definition = "The date and time that the report was issued. This is not necessarily the same as the date and time that the report was created, since a report may be revised and/or reviewed after it is created."
-
-//R4* extension contains http://hl7.org/fhir/5.0/StructureDefinition/extension-DiagnosticReport.note named note 0..*
-//R4* extension[note].valueAnnotation.extension contains $annotation-type named annotation-type 0..*
-//R4* extension[note].valueAnnotation.extension[annotation-type].valueCodeableConcept from Hl7EuImagingSectionValueSet (preferred)
-
-* note 
-  * extension contains $annotation-type named annotation-type 0..*
-  * extension[annotation-type].valueCodeableConcept from Hl7EuImagingSectionValueSet (preferred)
 
 // * composition 0..0 -> we use composition
 // * media 0..0 // not in not in keyimages section
@@ -151,7 +151,7 @@ The regions SHALL overlap with the bodysite references from `ImagingStudy.serie.
 * resultsInterpreter[author] only Reference($EuPractitioner or $EuPractitionerRole)
 
 * result 0..* MS
-* result only Reference(ObservationFindingEuImaging)
+* result only Reference(ObservationFindingEuImaging or ObservationNarrativeReport)
 * result ^short = "Findings"
 * result ^definition = """
 Detailed description of the findings on the imaging study. The findings should be described in a clear and concise manner,
@@ -212,7 +212,6 @@ Recommendations a radiologist provides in the report for possible follow up acti
 * extension[communication] ^definition = """
 Communications captures what communications have been made with other care providers.
 """
-* extension contains RadiationDoseExt named radiationDose 0..1 MS
 // We have changed these and they now deviate from IDR as they also need to include the notes related to those sections.
 // * obeys hl7eu-im-dr-code
 // * obeys hl7eu-im-dr-category
@@ -332,3 +331,22 @@ Invariant: hl7eu-im-dr-finding
 Description: "Finding must be present in composition."
 * severity = #error
 * expression = "DiagnosticReport.composition.resolve().section.entry.reference.superset(result.reference)"
+
+// ////////////////////////// Status <-> relatesTo correspondence //////////////////////////
+
+Invariant: eu-imaging-dr-status-replacement
+Description: "DiagnosticReport.status SHALL be 'amended' if and only if the referenced Composition replaces a prior report and has status 'final'."
+* severity = #error
+//R4* expression = "(status = 'amended') = extension('http://hl7.org/fhir/5.0/StructureDefinition/extension-DiagnosticReport.composition').value.resolve().where(status = 'final' and relatesTo.where(code = 'replaces').exists()).exists()"
+* expression = "(status = 'amended') = composition.resolve().where(status = 'final' and relatesTo.where(type = 'replaces').exists()).exists()"
+
+Invariant: eu-imaging-dr-status-retraction
+Description: "DiagnosticReport.status SHALL be 'entered-in-error' if and only if the referenced Composition retracts a prior report by replacing it with status 'entered-in-error'."
+* severity = #error
+//R4* expression = "(status = 'entered-in-error') = extension('http://hl7.org/fhir/5.0/StructureDefinition/extension-DiagnosticReport.composition').value.resolve().where(status = 'entered-in-error' and relatesTo.where(code = 'replaces').exists()).exists()"
+* expression = "(status = 'entered-in-error') = composition.resolve().where(status = 'entered-in-error' and relatesTo.where(type = 'replaces').exists()).exists()"
+
+Invariant: eu-imaging-dr-status-no-addendum
+Description: "DiagnosticReport.status SHALL NOT be 'appended' or 'corrected'; content added or corrected after final issuance is represented as a complete replacement with status 'amended'."
+* severity = #error
+* expression = "status != 'appended' and status != 'corrected'"

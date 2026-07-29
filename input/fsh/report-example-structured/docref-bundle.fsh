@@ -46,18 +46,18 @@ Usage: #example
 * identifier
   * system = "http://example.org/myhosptital/reportidentifiers"
   * value = "aspecificidentifier" // invented - not there in the report
-* entry[+]
+* entry[CompositionEuImaging][+]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/Composition/CompositionStructured"
   * resource = CompositionStructured
-* entry[+]
+* entry[DiagnosticReportEuImaging][+]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/DiagnosticReport/DiagnosticReportStructured"
   * resource = DiagnosticReportStructured
 * entry[+]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/Patient/PatientStructuredReport"
   * resource = PatientStructuredReport
 * entry[ImagingStudy][+]
-  * fullUrl = "http://hl7.eu/fhir/imaging-r5/ImagingStudy/ImagingStudStructuredReport"
-  * resource = ImagingStudStructuredReport
+  * fullUrl = "http://hl7.eu/fhir/imaging-r5/ImagingStudy/ImagingStudyStructuredReport"
+  * resource = ImagingStudyStructuredReport
 * entry[+]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/PractitionerRole/PractitionerRoleStructuredReportAuthor"
   * resource = PractitionerRoleStructuredReportAuthor
@@ -184,6 +184,9 @@ Usage: #example
 * entry[+]
   * fullUrl = "http://hl7.eu/fhir/imaging-r5/Observation/StressWmsi17"
   * resource = StressWmsi17
+* entry[+]
+  * fullUrl = "http://hl7.eu/fhir/imaging-r5/Observation/NarrativeFindingsAll"
+  * resource = NarrativeFindingsAll
 //R4* entry[+]
 //R4  * fullUrl = "http://hl7.eu/fhir/imaging-r5/DocumentReference/StructuredKeyImageRest"
 //R4  * resource = StructuredKeyImageRest

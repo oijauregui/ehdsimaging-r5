@@ -8,12 +8,12 @@ The structure of this report is illustrated in the figure below.
 
 <figure>
 	{% include example-unstructured.svg %}
-	<figcaption>Figure: Renderable format with minimal metadata resource structure</figcaption>
+	<figcaption>Figure 1: Renderable format with minimal metadata resource structure</figcaption>
 </figure>
 
 This example corresponds to the [Renderable format with minimal metadata](data-formats.html#renderable-format-with-minimal-metadata) data format.
 
-The report is represented as a DocumentReference resource following the profile {% include profile-link.html name="DocumentReferenceImagingReport" %}. It refers to a {{Patient}} and to an {{Organization}} resource that represents the custodian of the document.
+The report is represented as a DocumentReference resource following the profile [[[DocumentReferenceImagingReport]]]. It refers to a [[[Patient]]] and to an [[[Organization]]] resource that represents the custodian of the document.
 
 Resources used in this example:
 

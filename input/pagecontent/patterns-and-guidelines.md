@@ -6,11 +6,6 @@ As is discussed in the [Data Formats](data-formats.html) section there are two f
 * For imaging reports with minimal metadata the presented form is the pdf attached to the `DiagnosticReport`.
 * For Regular imaging reports the presented form is the html Narrative of the `Composition` resource, stored in `Compostion.text` and `Compostion.section.text`.
 
-
-### Representing unstructured text (dictated notes)
-
-These are stored in DiagnosticReport.note and in Composition.section.extension[note]. Based on this content the section.text and DiagnosticReport.text and Composition.text are populated.
-
 ### Inclusion of tables
 
 The annotations are entered as markdown which allows inclusion of tables
@@ -38,42 +33,102 @@ The `href` field of the link holds a relative reference to the referred resource
 
 These links can be included in the text (Narrative) using the mechanism described in the previous section. This does require that the `ImagingStudy`/`Observation` resource representing the finding/prior is included in the document.
 
-{% include patterns-and-guidelines-missing-data.md %}
 
 ### What terminology use in the report
 
 The specification focusses first on the infrastructural aspects and marks the terminology related this as extensible. We are conservative in placing terminology requirements on findings and interpretations are there currently is not a widespread consensus on what terminology is used.
 
-### Support for addendum documents
+### Support for report replacement and retraction
 
-These are separate documents; separate imaging reports. The relationship of the addendum to the source document should be represented in the `Composition.relatesTo` field, as is illustrated below.
+This spec follows the document-level mechanics outlined in the HL7 [FHIR Clinical Document — Succession Management](https://build.fhir.org/ig/HL7/fhir-clinical-document/en/versioning.html) specification, except that addenda are not allowed, and introducing requirements to the `DiagnosticReport.status` population.
+
+#### Replacement of a report example snippet
+
+See the replacement [DiagnosticReport example](DiagnosticReport-ImagingReportReplacementExample.html) and [Composition example](Composition-ImagingReportReplacementComposition.html).
 
 {% if isR4 %}
 ```json
-...
-  "relatesTo" : [
-    { "code": "appends",
-      "targetIdentifier": { "system": ..., "value", ...} 
+// DiagnosticReport
+{
+  "resourceType": "DiagnosticReport",
+  "status": "amended"
+}
+// Composition
+{
+  "resourceType": "Composition",
+  "status": "final",
+  "relatesTo": [
+    {
+      "code": "replaces",
+      "targetIdentifier": { "system": "...", "value": "..." }
     }
   ]
-...
-
+}
 ```
 {% endif %}
 {% if isR5 %}
 ```json
-...
-  "relatesTo" : [
-    { "type": "amends",
-      "resourceReference":{ 
-        ...
-        "identifier":  { "system": ..., "value", ...} 
-        ...
-      }
+// DiagnosticReport
+{
+  "resourceType": "DiagnosticReport",
+  "status": "amended"
+}
+// Composition
+{
+  "resourceType": "Composition",
+  "status": "final",
+  "relatesTo": [
+    {
+      "type": "replaces",
+      "resourceReference": { "identifier": { "system": "...", "value": "..." } }
     }
   ]
-...
+}
+```
+{% endif %}
 
+#### Retraction of a report example snippet
+
+See the retraction [DiagnosticReport example](DiagnosticReport-ImagingReportRetractionExample.html) and [Composition example](Composition-ImagingReportRetractionComposition.html).
+
+{% if isR4 %}
+```json
+// DiagnosticReport
+{
+  "resourceType": "DiagnosticReport",
+  "status": "entered-in-error"
+}
+// Composition
+{
+  "resourceType": "Composition",
+  "status": "entered-in-error",
+  "relatesTo": [
+    {
+      "code": "replaces",
+      "targetIdentifier": { "system": "...", "value": "..." }
+    }
+  ]
+}
+```
+{% endif %}
+{% if isR5 %}
+```json
+// DiagnosticReport
+{
+  "resourceType": "DiagnosticReport",
+  "status": "entered-in-error"
+}
+// Composition
+{
+  "resourceType": "Composition",
+  "status": "entered-in-error",
+  "relatesTo": [
+    {
+      "type": "replaces",
+      "resourceReference": { "identifier": { "system": "...", "value": "..." } }
+    }
+  ]
+}
 ```
 {% endif %}
 
@@ -109,16 +164,26 @@ Some of the source data for imaging report comes from DICOM. Although DICOM reco
 
 ```json
 ...
-  "started" : "2015-02-07T13:28:17-05:00"
-  "_started" : {
-    "extension" : [
-      { "url": "http://hl7.org/fhir/StructureDefinition/uncertainPeriod",
-        "valuePeriod" : {
-          "start": "2015-02-07T13:28:17-12:00",
-          "end": "2015-02-07T13:28:17+12:00"
-        }
-       }
-    ]
-  }
+ "started" : "2015-02-07T13:28:17-05:00"
+ "_started" : {
+ "extension" : [
+ { "url": "http://hl7.org/fhir/StructureDefinition/uncertainPeriod",
+ "valuePeriod" : {
+ "start": "2015-02-07T13:28:17-12:00",
+ "end": "2015-02-07T13:28:17+12:00"
+ }
+ }
+ ]
+ }
 ...
 ```
+
+### Displaying the releasing organization
+
+The organization that released the imaging report is carried by `Composition.author` where the author is an `Organization` (equivalently `DiagnosticReport.performer[author]`, constrained to `Organization` per FHIR-51393). Consuming systems SHOULD make this releasing organization identifiable and display it to the reader as the source of the report.
+
+Consumers SHALL NOT infer the releasing organization from the clinical `encounter`: in independent-reporting / teleradiology / outside-read scenarios the encounter organization differs from the reporting organization, and the acquisition encounter may be unavailable. Where multiple author organizations are present, the releasing organization is the one referenced by the `Composition`/`DiagnosticReport` author/performer, not the encounter.
+
+### Assembling document bundles and freshness of data
+
+It is fully expected that organizations may assemble these document bundles and collections on the fly in response to a request, and that these documents may not be versioned. As a consequence, the `lastUpdated` of a bundle may not correspond to the last clinical change to a result and SHOULD NOT be relied upon as an indicator of clinical currency.
