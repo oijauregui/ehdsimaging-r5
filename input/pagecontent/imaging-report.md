@@ -65,6 +65,8 @@ This section is a list of other studies that were considered relevant by the ima
 
 In this specification a comparison study can be represented as an [[[ImagingStudyEuImaging]]] describing the full study or an [[[ImagingSelectionEuImaging]]] resource representing part of a study.
 
+The comparison section MAY refer to content that is not stored in the same PACS or held by the same healthcare provider. Consequently, the receiver of the report MAY be prepared to fall back to national or cross-national searches to locate the referred study.
+
 ##### Findings
 
 This section provides a detailed description of the findings on the imaging examination. The findings should be described in a clear and concise manner, using standardized anatomic, pathologic, and radiologic terminology whenever possible.
@@ -139,11 +141,11 @@ Document versioning is tracked using different concepts:
  
 These fields are present on the key resources of this IG as is illustrated by the table below:
 
-| Concept | DocumentReferenceImagingReport | DiagnosticReportEuImaging | CompositionEuImaging | 
+| Concept               | DocumentReferenceImagingReport                        | DiagnosticReportEuImaging  | CompositionEuImaging | 
 | --------------------- | ----------------------------------------------------- | -------------------------- | -------------------- |
-| issued/last-edit date | date | issued | date |
-| version | {%if isR4%}extension[version]{%else%}version{%endif%} | extension[artifactVersion] | {%if isR4%}extension[version]{%else%}version{%endif%} |
-| related | {%if isR4%}related{%else%}relatesTo{%endif%} | - | relatesTo |
+| issued/last-edit date |                                                       | issued                     | date |
+| version               | {%if isR4%}extension[version]{%else%}version{%endif%} | extension[artifactVersion] | {%if isR4%}extension[version]{%else%}version{%endif%} |
+| related               | {%if isR4%}related{%else%}relatesTo{%endif%}          | -                          | relatesTo |
  
 
 Imaging Report Producers SHOULD include version information in the documents, Consumers SHOULD take versioning into account.
