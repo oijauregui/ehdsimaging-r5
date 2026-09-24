@@ -19,6 +19,10 @@ As described by {{iheIDR}}, all radiology reports contain similar information. T
 
 General information on the report. Most of the information elements in this part of the report overlap with other clinical reports. The document header includes information on the patient, source organization, author, attester and custodian of the report.
 
+The author is expected to describe the healthcare professional responsible for the report. A `Device` may be referenced to identify the system used to generate the report, for example an AI system producing a preliminary read or other machine-generated result; it does not identify the imaging modality used to acquire the study, which belongs to the `ImagingStudy` resource. A `Device` or `Organization` as the only author SHOULD only be used when a practitioner was not involved in the imaging acquisition or the practitioner is not known.
+
+For more on AI-assisted reporting, see [Identifying AI-generated or CAD-assisted content](patterns-and-guidelines.html#identifying-ai-generated-or-cad-assisted-content).
+
 #### Document sections
 
 ##### Imaging Study
@@ -54,6 +58,10 @@ The information in this section is typically more detailed than what is listed a
 Any deficiencies of the study may also be described here, such as whether the imaging was incomplete or if there were quality issues that prevented interpretation of some part of the study or otherwise compromise the sensitivity and specificity of the examination. In the event that a patient was unable to undergo imaging, for example due to claustrophobia or a seizure, a report might still be produced and this section would note that the exam was not performed and provide a reason.
 
 While the actual instructions given to the patient are not typically listed in the report, some mention the fact that instructions were given, and perhaps that risks were discussed, and consent was obtained. Procedure notes from the technologist are typically captured elsewhere, but significant details such as adverse patient reactions, or things that may affect the quality of the study, may be included here.
+
+Complications that occur during the procedure are also documented in this section. These cover a wide range of events, for example an adverse reaction to a medication or contrast agent administered as part of the procedure, a patient fall from the examination table, claustrophobia, post-biopsy bleeding, etc. In this specification, complications may additionally be captured in a structured way through the [[[AdverseEventEuImaging]]] profile referenced from the procedure section entries (see [`Composition.section[procedure].entry[adverse-event]`](StructureDefinition-CompositionEuImaging-definitions.html#Composition.section:procedure.entry:adverse-event)). The rationale for this design is described in [Design Considerations](design-considerations.html).
+
+This procedure section usually includes free text, which is included in the `Composition.section[procedure].text` narrative (see [Representing unstructured (narrative) text in the report](#representing-unstructured-narrative-text-in-the-report)). When a large amount of information needs to be conveyed in this section, sub-sections (for example, a dedicated sub-section for complications) can be used. 
 
 Procedure details that may be required for billing are sometimes included here as well.
 
