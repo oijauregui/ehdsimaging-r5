@@ -8,6 +8,8 @@ The sections in this chapter elaborate on the design considerations and decision
 
 {% include design-consideration-data-entrypoints.md %}
 
+{% include design-consideration-imaging-study-usecases.md %}
+
 {% include design-consideration-healthcareprofessional.md %}
 
 {% include design-consideration-actors-obligations.md %}
@@ -18,10 +20,8 @@ The sections in this chapter elaborate on the design considerations and decision
 
 {% include design-consideration-linking-to-bodysites.md %}
 
-{% include design-consideration-radiation-dose-summary.md %}
-
 {% include design-consideration-procedure-adverse-reaction.md %}
 
 {% include design-consideration-keyimages.md %}
 
-
+{% include design-consideration-narrative-report.md %}
