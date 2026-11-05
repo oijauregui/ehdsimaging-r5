@@ -594,7 +594,7 @@ The following table shows the mapping from EHDSImagingReport logical model eleme
       <tr>
         <td>body.examinationReport.medicationAdministration</td>
         <td>equivalent</td>
-        <td><a href="https://hl7.org/fhir/medicationadministration.html" target="_blank">MedicationAdministration</a></td>
+        <td><a href="./StructureDefinition-MedicationAdministrationEuImaging.html">MedicationAdministrationEuImaging</a></td>
         <td></td>
         <td></td>
       </tr>
